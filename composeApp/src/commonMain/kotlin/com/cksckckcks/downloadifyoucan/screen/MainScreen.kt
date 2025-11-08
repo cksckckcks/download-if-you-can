@@ -1,6 +1,8 @@
 package com.cksckckcks.downloadifyoucan.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,15 +10,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cksckckcks.downloadifyoucan.theme.MainColor
 import com.cksckckcks.downloadifyoucan.theme.pretendard
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -41,6 +49,7 @@ fun MainScreen() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(Color.White)
         ) {
             // Date Part
             DateText(
@@ -55,6 +64,25 @@ fun MainScreen() {
                 localDateTime = localDateTime,
                 modifier = Modifier.padding(vertical = (12.5).dp, horizontal = 40.dp)
             )
+
+
+            // progress status
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 17.dp)
+            ) {
+                DayProgress(
+                    modifier = Modifier
+                        .shadow(2.dp, RoundedCornerShape(10.dp))
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color.White)
+                        .padding(horizontal = 20.dp, vertical = 20.dp),
+                    month = month,
+                    day = day,
+                    toDoCount = 10, // 임시 하드코딩
+                    doneCount = 3
+                )
+            }
 
 
         }
@@ -122,6 +150,62 @@ fun WeekCalendar(
                     color = if (currentDayOfWeek == index + 1) Color.Black else Color.Gray
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun DayProgress(
+    modifier: Modifier = Modifier,
+    month: Int,
+    day: Int,
+    toDoCount: Int,
+    doneCount: Int
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "${month}월 ${day}일 진행 상황",
+                    fontFamily = pretendard(),
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 15.sp,
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Text(
+                    text = "${doneCount}/${toDoCount}",
+                    fontFamily = pretendard(),
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 13.sp,
+                )
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            LinearProgressIndicator(
+                progress = { doneCount.toFloat() / toDoCount.toFloat() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(6.dp)
+                    .clip(RoundedCornerShape(3.dp)),
+                strokeCap = StrokeCap.Butt,
+                gapSize = 0.dp,
+                color = MainColor,
+                trackColor = Color.Gray,
+                drawStopIndicator = { } // 우측 진행 빈 람다를 통해 원 제거
+            )
         }
     }
 }
