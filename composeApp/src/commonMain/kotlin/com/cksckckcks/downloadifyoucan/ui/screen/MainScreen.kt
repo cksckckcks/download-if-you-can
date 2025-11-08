@@ -1,4 +1,4 @@
-package com.cksckckcks.downloadifyoucan.screen
+package com.cksckckcks.downloadifyoucan.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
@@ -24,16 +25,20 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cksckckcks.downloadifyoucan.model.Priority
+import com.cksckckcks.downloadifyoucan.model.ToDo
 import com.cksckckcks.downloadifyoucan.theme.MainColor
 import com.cksckckcks.downloadifyoucan.theme.pretendard
+import com.cksckckcks.downloadifyoucan.ui.component.ToDoCard
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 @Preview(showBackground = true)
-@OptIn(kotlin.time.ExperimentalTime::class)
+@OptIn(ExperimentalTime::class)
 @Composable
 fun MainScreen() {
     val localDateTime = Clock.System.now()
@@ -84,6 +89,53 @@ fun MainScreen() {
                 )
             }
 
+            val tmpToDoList = listOf(
+                ToDo(
+                    id = 1,
+                    title = "디자인 하기",
+                    description = "디자인~",
+                    year = 2025,
+                    month = 1,
+                    day = 1,
+                    priority = Priority.MEDIUM,
+                    isDone = false
+                ),
+                ToDo(
+                    id = 2,
+                    title = "디자인 하기",
+                    description = "디자인~",
+                    year = 2025,
+                    month = 1,
+                    day = 1,
+                    priority = Priority.HIGH,
+                    isDone = false
+                ),
+                ToDo(
+                    id = 3,
+                    title = "디자인 하기",
+                    description = "디자인~",
+                    year = 2025,
+                    month = 1,
+                    day = 1,
+                    priority = Priority.LOW,
+                    isDone = false
+                )
+            )
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = (28.5.dp), vertical = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(tmpToDoList.size) { idx ->
+                    val toDo = tmpToDoList[idx]
+
+                    ToDoCard(toDoItem = toDo)
+
+
+                }
+            }
 
         }
     }
