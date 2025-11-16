@@ -29,26 +29,26 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             // SQLDelight
-            implementation("app.cash.sqldelight:runtime:2.0.1")
-            implementation("app.cash.sqldelight:coroutines-extensions:2.0.1")
+            implementation("app.cash.sqldelight:runtime:2.1.0")
+            implementation("app.cash.sqldelight:coroutines-extensions:2.1.0")
         }
 
         androidMain.dependencies {
             // SQLDelight Android
-            implementation("app.cash.sqldelight:android-driver:2.0.1")
+            implementation("app.cash.sqldelight:android-driver:2.1.0")
         }
 
         iosMain.dependencies {
             // SQLDelight iOS
-            implementation("app.cash.sqldelight:native-driver:2.0.1")
+            implementation("app.cash.sqldelight:native-driver:2.1.0")
         }
     }
 }
 
 sqldelight {
     databases {
-        create("downloadIfYouCanDatabase") {
-            packageName.set("com.downloadifyoucan.database")
+        create("DownloadIfYouCanDatabase") {
+            packageName.set("com.cksckckcks.downloadifyoucan.database")
         }
     }
 }
