@@ -12,7 +12,6 @@ class ToDoDataBase(driverFactory: DriverFactory) {
     private val database = DownloadIfYouCanDatabase(driverFactory.createDriver())
     private val queries = database.toDoQueries
 
-
     fun getAllTodos(): Flow<List<Todo>> {
         return queries.selectAll()
             .asFlow()
@@ -58,7 +57,6 @@ class ToDoDataBase(driverFactory: DriverFactory) {
         }
     }
 
-
     // DB 업데이트
     suspend fun updateTodo(
         id: Long,
@@ -89,17 +87,10 @@ class ToDoDataBase(driverFactory: DriverFactory) {
         }
     }
 
-
     // 삭제
     suspend fun deleteTodo(id: Long) {
         withContext(Dispatchers.Default) {
             queries.deleteById(id)
-        }
-    }
-
-    suspend fun deleteCompleted() {
-        withContext(Dispatchers.Default) {
-            queries.deleteCompleted()
         }
     }
 
@@ -108,7 +99,6 @@ class ToDoDataBase(driverFactory: DriverFactory) {
             queries.deleteAll()
         }
     }
-
 
     private fun getCurrentDate(): String {
         return Clock.System.todayIn(TimeZone.currentSystemDefault()).toString()
