@@ -5,10 +5,52 @@ CREATE TABLE Todo (
     title TEXT NOT NULL,
     description TEXT,
     isCompleted INTEGER AS Boolean NOT NULL DEFAULT 0,
-    createdAt INTEGER NOT NULL,
-    completedAt INTEGER,
+    createdAt TEXT NOT NULL,  -- ⭐ "2025-11-16 15:30:00"
+    dueDate TEXT NOT NULL,     -- ⭐ "2025-11-16"
+    completedAt TEXT,          -- ⭐ "2025-11-16 15:30:00"
     priority INTEGER NOT NULL DEFAULT 0
 );
 
+CREATE INDEX todo_due_date_idx ON Todo(dueDate);
+CREATE INDEX todo_created_idx ON Todo(createdAt);
+
+
 selectAll:
-SELECT * FROM Todo ORDER BY createdAt DESC;
+SELECT * FROM Todo
+ORDER BY dueDate ASC, priority DESC, createdAt DESC;
+
+selectById:
+SELECT * FROM Todo WHERE id = ?;
+
+selectByDate:
+SELECT * FROM Todo
+WHERE isCompleted = 0 AND dueDate = ?
+ORDER BY priority DESC;
+
+
+
+insert:
+INSERT INTO Todo(title, description, createdAt, dueDate, priority)
+VALUES (?, ?, ?, ?, ?);
+
+update:
+UPDATE Todo
+SET title = ?, description = ?, dueDate = ?, priority = ?
+WHERE id = ?;
+
+toggleComplete:
+UPDATE Todo
+SET isCompleted = :isCompleted,
+    completedAt = :completedAt
+WHERE id = :id;
+
+
+
+deleteById:
+DELETE FROM Todo WHERE id = ?;
+
+deleteCompleted:
+DELETE FROM Todo WHERE isCompleted = 1;
+
+deleteAll:
+DELETE FROM Todo;
