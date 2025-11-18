@@ -1,6 +1,7 @@
 package com.cksckckcks.downloadifyoucan.ui.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,8 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +36,8 @@ import com.cksckckcks.downloadifyoucan.model.ToDo
 import com.cksckckcks.downloadifyoucan.theme.MainColor
 import com.cksckckcks.downloadifyoucan.theme.pretendard
 import com.cksckckcks.downloadifyoucan.ui.component.ToDoCard
+import com.cksckckcks.downloadifyoucan.viewModel.MainViewModel
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -43,18 +48,28 @@ import kotlin.time.ExperimentalTime
 @Preview(showBackground = true)
 @OptIn(ExperimentalTime::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    viewModel: MainViewModel
+) {
     val localDateTime = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault())
     val month = localDateTime.monthNumber
     val day = localDateTime.dayOfMonth
+
+    val selectedDate by viewModel.selectedDate.collectAsState()
+    val selectedMonth = selectedDate.monthNumber
+    val selectedDay = selectedDate.dayOfMonth
+
+    val toDoList by viewModel.todoList.collectAsState()
+
+
+
 
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.systemBars)
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -71,6 +86,8 @@ fun MainScreen() {
 
             WeekCalendar(
                 localDateTime = localDateTime,
+                selectedDate = selectedDate,
+                dateClickable = { viewModel.updateSelectedDate(it) },
                 modifier = Modifier.padding(vertical = (12.5).dp, horizontal = 40.dp)
             )
 
@@ -86,45 +103,14 @@ fun MainScreen() {
                         .clip(RoundedCornerShape(10.dp))
                         .background(Color.White)
                         .padding(horizontal = 20.dp, vertical = 20.dp),
-                    month = month,
-                    day = day,
+                    month = selectedMonth,
+                    day = selectedDay,
                     toDoCount = 10, // 임시 하드코딩
                     doneCount = 3
                 )
             }
 
-            val tmpToDoList = listOf(
-                ToDo(
-                    id = 1,
-                    title = "디자인 하기",
-                    description = "디자인~",
-                    year = 2025,
-                    month = 1,
-                    day = 1,
-                    priority = Priority.MEDIUM,
-                    isDone = false
-                ),
-                ToDo(
-                    id = 2,
-                    title = "디자인 하기",
-                    description = "디자인~",
-                    year = 2025,
-                    month = 1,
-                    day = 1,
-                    priority = Priority.HIGH,
-                    isDone = false
-                ),
-                ToDo(
-                    id = 3,
-                    title = "디자인 하기",
-                    description = "디자인~",
-                    year = 2025,
-                    month = 1,
-                    day = 1,
-                    priority = Priority.LOW,
-                    isDone = false
-                )
-            )
+
 
             LazyColumn(
                 modifier = Modifier
@@ -132,8 +118,8 @@ fun MainScreen() {
                     .padding(horizontal = (28.5.dp), vertical = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                items(tmpToDoList.size) { idx ->
-                    val toDo = tmpToDoList[idx]
+                items(toDoList.size) { idx ->
+                    val toDo = toDoList[idx]
 
                     ToDoCard(toDoItem = toDo)
 
@@ -163,13 +149,15 @@ fun DateText(
 @Composable
 fun WeekCalendar(
     localDateTime: LocalDateTime,
+    selectedDate: LocalDate,
+    dateClickable: (LocalDate) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val currentDayOfWeek = localDateTime.dayOfWeek.ordinal + 1
     val currentDay = localDateTime.dayOfMonth
 
     val weekDays = (0..6).map { offset ->
-        val day = currentDay - currentDayOfWeek + 1 + offset
+        val day = currentDay - currentDayOfWeek + offset
         day
     }
 
@@ -182,7 +170,13 @@ fun WeekCalendar(
         weekDays.forEachIndexed { index, day ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(25))
+                    .background(if (day == selectedDate.dayOfMonth) MainColor.copy(alpha = 0.1f) else Color.White)
+                    .padding(vertical = 10.dp)
+                    .clickable { dateClickable(LocalDate(localDateTime.year, localDateTime.monthNumber, day)) }
+
             ) {
                 Text(
                     text = dayNames[index],
@@ -201,11 +195,12 @@ fun WeekCalendar(
                 Text(
                     text = day.toString(),
                     fontFamily = pretendard(),
-                    fontWeight = if (currentDayOfWeek == index + 1) FontWeight.Bold else FontWeight.Medium,
+                    fontWeight = if (currentDayOfWeek == index) FontWeight.Bold else FontWeight.Medium,
                     fontSize = 14.sp,
-                    color = if (currentDayOfWeek == index + 1) Color.Black else Color.Gray
+                    color = if (currentDayOfWeek == index) Color.Black else Color.Gray
                 )
             }
+
         }
     }
 }

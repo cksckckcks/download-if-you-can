@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cksckckcks.downloadifyoucan.model.ToDo
+import com.cksckckcks.downloadifyoucan.model.image
 import com.cksckckcks.downloadifyoucan.theme.SubBackgroundColor
 import com.cksckckcks.downloadifyoucan.theme.SubFontColor
 import com.cksckckcks.downloadifyoucan.theme.pretendard

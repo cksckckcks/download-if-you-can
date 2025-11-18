@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -21,10 +20,15 @@ kotlin {
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
-            isStatic = true
+            isStatic = false
+        }
+
+        iosTarget.binaries.all {
+            linkerOpts("-lsqlite3")
+            freeCompilerArgs += "-Xbinary=bundleId=com.cksckckcks.downloadifyoucan.ComposeApp"
         }
     }
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
@@ -40,6 +44,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
+            // Shared module
+            implementation(project(":shared"))
 
             // DateTime
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1")

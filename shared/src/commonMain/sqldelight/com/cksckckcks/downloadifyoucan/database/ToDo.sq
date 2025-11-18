@@ -1,0 +1,52 @@
+import kotlin.Boolean;
+
+CREATE TABLE Todo (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    description TEXT,
+    isDone INTEGER AS Boolean NOT NULL DEFAULT 0,
+    createdAt TEXT NOT NULL,
+    dueDate TEXT NOT NULL,
+    completedAt TEXT,
+    priority INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE INDEX todo_due_date_idx ON Todo(dueDate);
+CREATE INDEX todo_created_idx ON Todo(createdAt);
+
+-- SELECT
+selectAll:
+SELECT * FROM Todo
+ORDER BY dueDate ASC, priority DESC, createdAt DESC;
+
+selectById:
+SELECT * FROM Todo WHERE id = ?;
+
+selectByDate:
+SELECT * FROM Todo
+WHERE isDone = 0 AND dueDate = ?
+ORDER BY priority DESC;
+
+
+-- INSERT / UPDATE
+insert:
+INSERT INTO Todo(title, description, createdAt, dueDate, priority)
+VALUES (?, ?, ?, ?, ?);
+
+update:
+UPDATE Todo
+SET title = ?, description = ?, dueDate = ?, priority = ?
+WHERE id = ?;
+
+toggleComplete:
+UPDATE Todo
+SET isDone = :isDone, completedAt = :completedAt
+WHERE id = :id;
+
+
+-- DELETE
+deleteById:
+DELETE FROM Todo WHERE id = ?;
+
+deleteAll:
+DELETE FROM Todo;

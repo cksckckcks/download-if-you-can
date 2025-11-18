@@ -6,11 +6,9 @@ import downloadifyoucan.composeapp.generated.resources.todo_low
 import downloadifyoucan.composeapp.generated.resources.todo_medium
 import org.jetbrains.compose.resources.DrawableResource
 
-enum class Priority(
-    val image: DrawableResource
-) {
-    LOW(Res.drawable.todo_low),
-    MEDIUM(Res.drawable.todo_medium),
-    HIGH(Res.drawable.todo_high)
-}
-// 추후 Imege 추가해두기
+val Priority.image: DrawableResource
+    get() = when (this) {
+        Priority.LOW -> Res.drawable.todo_low
+        Priority.MEDIUM -> Res.drawable.todo_medium
+        Priority.HIGH -> Res.drawable.todo_high
+    }
