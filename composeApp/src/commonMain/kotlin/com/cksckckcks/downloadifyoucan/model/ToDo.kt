@@ -1,7 +1,5 @@
 package com.cksckckcks.downloadifyoucan.model
 
-import kotlinx.datetime.LocalDate
-
 data class ToDo(
     val id: Int,
     val title: String,
