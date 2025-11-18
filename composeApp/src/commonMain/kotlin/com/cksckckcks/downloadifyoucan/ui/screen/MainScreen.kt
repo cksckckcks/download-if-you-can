@@ -172,7 +172,7 @@ fun WeekCalendar(
     val currentDay = localDateTime.dayOfMonth
 
     val weekDays = (0..6).map { offset ->
-        val day = currentDay - currentDayOfWeek + 1 + offset
+        val day = currentDay - currentDayOfWeek + offset
         day
     }
 
@@ -204,9 +204,9 @@ fun WeekCalendar(
                 Text(
                     text = day.toString(),
                     fontFamily = pretendard(),
-                    fontWeight = if (currentDayOfWeek == index + 1) FontWeight.Bold else FontWeight.Medium,
+                    fontWeight = if (currentDayOfWeek == index) FontWeight.Bold else FontWeight.Medium,
                     fontSize = 14.sp,
-                    color = if (currentDayOfWeek == index + 1) Color.Black else Color.Gray
+                    color = if (currentDayOfWeek == index) Color.Black else Color.Gray
                 )
             }
         }
