@@ -38,7 +38,6 @@ class ToDoDataBase(driverFactory: DriverFactory) {
             .mapToOneOrNull(Dispatchers.Default)
     }
 
-
     // DB 삽입
     suspend fun insertTodo(
         title: String,
@@ -62,7 +61,7 @@ class ToDoDataBase(driverFactory: DriverFactory) {
         id: Long,
         title: String,
         description: String?,
-        dueDate: String,  // ⭐ "2025-11-16"
+        dueDate: String,
         priority: Long
     ) {
         withContext(Dispatchers.Default) {
@@ -77,11 +76,11 @@ class ToDoDataBase(driverFactory: DriverFactory) {
     }
 
     // 완료 토글
-    suspend fun toggleComplete(id: Long, isCompleted: Boolean) {
+    suspend fun toggleComplete(id: Long, isDone: Boolean) {
         withContext(Dispatchers.Default) {
             queries.toggleComplete(
-                isCompleted = isCompleted,
-                completedAt = if (isCompleted) getCurrentDateTime() else null,
+                isDone = isDone,
+                completedAt = if (isDone) getCurrentDateTime() else null,
                 id = id
             )
         }
@@ -111,8 +110,6 @@ class ToDoDataBase(driverFactory: DriverFactory) {
         return "${localDateTime.date} ${localDateTime.time.hour.toString().padStart(2, '0')}:${localDateTime.time.minute.toString().padStart(2, '0')}:${localDateTime.time.second.toString().padStart(2, '0')}"
     }
 }
-
-
 
 fun String.toLocalDateTime(): LocalDateTime? {
     return try {

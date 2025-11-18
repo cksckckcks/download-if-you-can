@@ -4,7 +4,7 @@ CREATE TABLE Todo (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     description TEXT,
-    isCompleted INTEGER AS Boolean NOT NULL DEFAULT 0,
+    isDone INTEGER AS Boolean NOT NULL DEFAULT 0,
     createdAt TEXT NOT NULL,
     dueDate TEXT NOT NULL,
     completedAt TEXT,
@@ -24,7 +24,7 @@ SELECT * FROM Todo WHERE id = ?;
 
 selectByDate:
 SELECT * FROM Todo
-WHERE isCompleted = 0 AND dueDate = ?
+WHERE isDone = 0 AND dueDate = ?
 ORDER BY priority DESC;
 
 
@@ -40,8 +40,7 @@ WHERE id = ?;
 
 toggleComplete:
 UPDATE Todo
-SET isCompleted = :isCompleted,
-    completedAt = :completedAt
+SET isDone = :isDone, completedAt = :completedAt
 WHERE id = :id;
 
 
