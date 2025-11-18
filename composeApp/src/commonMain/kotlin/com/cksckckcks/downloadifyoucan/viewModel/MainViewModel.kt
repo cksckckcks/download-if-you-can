@@ -44,7 +44,7 @@ class MainViewModel(
 
     private fun loadTodosByDate(date: LocalDate) {
         viewModelScope.launch {
-            val dateString = LocalDate.toString()
+            val dateString = date.toString()
 
             dataBase.getTodosByDate(dateString).collect { dbTodos ->
                 _todoList.value = dbTodos.map { it.toToDo() }
