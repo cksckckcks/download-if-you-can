@@ -33,6 +33,7 @@ import com.cksckckcks.downloadifyoucan.model.ToDo
 import com.cksckckcks.downloadifyoucan.theme.MainColor
 import com.cksckckcks.downloadifyoucan.theme.pretendard
 import com.cksckckcks.downloadifyoucan.ui.component.ToDoCard
+import com.cksckckcks.downloadifyoucan.viewModel.MainViewModel
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -43,7 +44,9 @@ import kotlin.time.ExperimentalTime
 @Preview(showBackground = true)
 @OptIn(ExperimentalTime::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    viewModel: MainViewModel
+) {
     val localDateTime = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault())
     val month = localDateTime.monthNumber

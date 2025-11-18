@@ -5,7 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
+import com.cksckckcks.downloadifyoucan.database.DriverFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,13 +14,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            AppAndroidPreview()
+            AndroidApp()
         }
     }
 }
 
-@Preview
 @Composable
-fun AppAndroidPreview() {
-    App()
+fun AndroidApp() {
+    val context = LocalContext.current
+
+    App(
+        driverFactory = DriverFactory(context)
+    )
 }

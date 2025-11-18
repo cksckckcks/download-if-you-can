@@ -22,7 +22,12 @@ kotlin {
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "Shared"
-            isStatic = true
+            isStatic = false
+        }
+
+        iosTarget.binaries.all {
+            linkerOpts("-lsqlite3")
+            freeCompilerArgs += "-Xbinary=bundleId=com.cksckckcks.downloadifyoucan.Shared"
         }
     }
 
