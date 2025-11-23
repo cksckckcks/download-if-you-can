@@ -31,8 +31,6 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.cksckckcks.downloadifyoucan.model.Priority
-import com.cksckckcks.downloadifyoucan.model.ToDo
 import com.cksckckcks.downloadifyoucan.theme.MainColor
 import com.cksckckcks.downloadifyoucan.theme.pretendard
 import com.cksckckcks.downloadifyoucan.ui.component.ToDoCard
@@ -61,8 +59,6 @@ fun MainScreen(
     val selectedDay = selectedDate.dayOfMonth
 
     val toDoList by viewModel.todoList.collectAsState()
-
-
 
 
     Scaffold(
@@ -153,7 +149,7 @@ fun WeekCalendar(
     dateClickable: (LocalDate) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val currentDayOfWeek = localDateTime.dayOfWeek.ordinal + 1
+    val currentDayOfWeek = (localDateTime.dayOfWeek.ordinal + 1) % 7
     val currentDay = localDateTime.dayOfMonth
 
     val weekDays = (0..6).map { offset ->

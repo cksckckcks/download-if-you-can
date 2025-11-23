@@ -25,14 +25,15 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun MainButton(
     modifier: Modifier = Modifier,
     text: String = "Button",
+    enable: Boolean,
     buttonClick: () -> Unit = {}
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(5.dp))
-            .background(MainColor)
-            .clickable { buttonClick() },
+            .background(if (enable) MainColor else Color.Gray)
+            .clickable { if (enable) buttonClick() else Unit },
         contentAlignment = Alignment.Center
     ) {
         Text(
