@@ -1,4 +1,5 @@
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -22,7 +23,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun Calendar(
     today: LocalDate = LocalDate(2025,11,1),
-    selectedDate: LocalDate = LocalDate(2025,11,1)
+    selectedDate: LocalDate = LocalDate(2025,11,1),
+    onDateClick: (LocalDate) -> Unit = {}
 ) {
     val pagerState = rememberPagerState(pageCount = { 12 })
 
@@ -74,6 +76,7 @@ fun Calendar(
                 WeekRow(
                     week = week,
                     selectedDate = selectedDate,
+                    onDateClick = onDateClick
                 )
             }
         }
@@ -84,6 +87,7 @@ fun Calendar(
 fun WeekRow(
     week: List<LocalDate?>,
     selectedDate: LocalDate,
+    onDateClick: (LocalDate) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -92,7 +96,8 @@ fun WeekRow(
         week.forEach { date ->
             DayBox(
                 date = date,
-                selectedDate = selectedDate
+                selectedDate = selectedDate,
+                onDateClick = onDateClick
             )
         }
     }
@@ -101,7 +106,8 @@ fun WeekRow(
 @Composable
 fun DayBox(
     date: LocalDate?,
-    selectedDate: LocalDate
+    selectedDate: LocalDate,
+    onDateClick: (LocalDate) -> Unit
 ) {
     val selected = date == selectedDate
 
@@ -116,7 +122,12 @@ fun DayBox(
                 .background(
                     color = if (selected) MainColor else Color.Transparent,
                     shape = RectangleShape
-                ),
+                )
+                .clickable {
+                    if (date != null) {
+                        onDateClick(date)
+                    }
+                },
             contentAlignment = Alignment.Center
         ) {
             Text(

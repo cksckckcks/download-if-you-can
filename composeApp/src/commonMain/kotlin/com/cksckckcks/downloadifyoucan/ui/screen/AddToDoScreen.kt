@@ -1,7 +1,6 @@
 package com.cksckckcks.downloadifyoucan.ui.screen
 
 import Calendar
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +13,8 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -22,11 +23,8 @@ import com.cksckckcks.downloadifyoucan.ui.component.MainInputField
 import com.cksckckcks.downloadifyoucan.ui.component.PrioritySelector
 import com.cksckckcks.downloadifyoucan.ui.component.SubTitleText
 import com.cksckckcks.downloadifyoucan.ui.component.TitleText
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.todayIn
+import com.cksckckcks.downloadifyoucan.viewModel.AddToDoViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 
@@ -34,9 +32,15 @@ import kotlin.time.ExperimentalTime
 @OptIn(ExperimentalTime::class)
 @Composable
 fun AddToDoScreen(
-
+    viewModel: AddToDoViewModel
 ) {
-    val now: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
+    val selectedDate by viewModel.selectedDate.collectAsState()
+    val title by viewModel.title.collectAsState()
+    val description by viewModel.description.collectAsState()
+    val priority by viewModel.priority.collectAsState()
+
+    val itemSpaceValue = 21.dp
+
 
     Scaffold(
         modifier = Modifier
@@ -61,40 +65,55 @@ fun AddToDoScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Calendar(
-                    today = now,
-                    selectedDate = now
+                    today = selectedDate,
+                    selectedDate = selectedDate,
+                    onDateClick = {
+                        viewModel.updateSelectedDate(it)
+                    }
                 )
             }
 
-            Spacer(modifier = Modifier.height(21.dp))
+            Spacer(modifier = Modifier.height(itemSpaceValue))
 
             SubTitleText("제목")
             MainInputField(
-                value = "",
-                onValueChange = {},
+                value =  title,
+                onValueChange = {
+                    viewModel.updateTitle(it)
+                },
                 placeholder = "할일을 입력하세요",
                 singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(21.dp))
+            Spacer(modifier = Modifier.height(itemSpaceValue))
 
             SubTitleText("세부내용")
             MainInputField(
-                value = "",
-                onValueChange = {},
+                value = description,
+                onValueChange = {
+                    viewModel.updateDescription(it)
+                },
                 placeholder = "할일을 입력하세요",
                 singleLine = false
             )
 
-            Spacer(modifier = Modifier.height(21.dp))
+            Spacer(modifier = Modifier.height(itemSpaceValue))
 
             SubTitleText("급함 정도")
-            PrioritySelector()
+            PrioritySelector(
+                selectedPriority = priority,
+                onPriorityClick = { viewModel.updatePriority(it) }
+            )
 
-            Spacer(modifier = Modifier.height(21.dp))
+            Spacer(modifier = Modifier.height(itemSpaceValue))
 
-            MainButton(text = "할일 추가하기")
-
+            MainButton(
+                text = "할일 추가하기",
+                enable = viewModel.checkInput(),
+                buttonClick = {
+                    viewModel.addTodo()
+                }
+            )
         }
     }
 }
