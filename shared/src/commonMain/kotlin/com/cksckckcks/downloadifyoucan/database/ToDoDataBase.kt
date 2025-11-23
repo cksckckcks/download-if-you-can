@@ -6,7 +6,14 @@ import app.cash.sqldelight.coroutines.mapToOneOrNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.*
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.todayIn
+
+@OptIn(kotlin.time.ExperimentalTime::class)
 
 class ToDoDataBase(driverFactory: DriverFactory) {
     private val database = DownloadIfYouCanDatabase(driverFactory.createDriver())
@@ -100,11 +107,11 @@ class ToDoDataBase(driverFactory: DriverFactory) {
     }
 
     private fun getCurrentDate(): String {
-        return Clock.System.todayIn(TimeZone.currentSystemDefault()).toString()
+        return kotlin.time.Clock.System.todayIn(TimeZone.currentSystemDefault()).toString()
     }
 
     private fun getCurrentDateTime(): String {
-        val instant = Clock.System.now()
+        val instant = kotlin.time.Clock.System.now()
         val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
 
         return "${localDateTime.date} ${localDateTime.time.hour.toString().padStart(2, '0')}:${localDateTime.time.minute.toString().padStart(2, '0')}:${localDateTime.time.second.toString().padStart(2, '0')}"
