@@ -38,7 +38,7 @@ kotlin {
             implementation("app.cash.sqldelight:coroutines-extensions:2.1.0")
 
             // time
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1")
         }
 
         androidMain.dependencies {
