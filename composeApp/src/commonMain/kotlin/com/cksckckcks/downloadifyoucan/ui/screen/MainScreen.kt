@@ -1,5 +1,6 @@
 package com.cksckckcks.downloadifyoucan.ui.screen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -45,6 +46,7 @@ import com.cksckckcks.downloadifyoucan.ui.component.ToDoCard
 import com.cksckckcks.downloadifyoucan.viewModel.MainViewModel
 import downloadifyoucan.composeapp.generated.resources.Res
 import downloadifyoucan.composeapp.generated.resources.ic_add
+import downloadifyoucan.composeapp.generated.resources.logo_angry
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -138,6 +140,35 @@ fun MainScreenContent(
             )
 
             // progress status
+            if (todos.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                    ) {
+                        Image(
+                            painter = painterResource(Res.drawable.logo_angry),
+                            contentDescription = "할 일 없음",
+                            modifier = Modifier
+                                .size(300.dp)
+                        )
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        Text(
+                            text = "할 일이 없어요!",
+                            fontFamily = pretendard(),
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 20.sp,
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                        )
+                    }
+                }
+            }
             Box(
                 modifier = Modifier
                     .padding(horizontal = 20.dp, vertical = 17.dp)
