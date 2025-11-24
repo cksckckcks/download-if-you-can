@@ -5,14 +5,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import com.cksckckcks.downloadifyoucan.database.DriverFactory
+import com.cksckckcks.downloadifyoucan.di.appModule
+import com.cksckckcks.downloadifyoucan.di.platformModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.GlobalContext.startKoin
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
+        startKoin {
+            androidContext(applicationContext)
+            modules(appModule, platformModule)
+        }
         setContent {
             AndroidApp()
         }
@@ -21,9 +27,5 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun AndroidApp() {
-    val context = LocalContext.current
-
-    App(
-        driverFactory = DriverFactory(context)
-    )
+    App()
 }

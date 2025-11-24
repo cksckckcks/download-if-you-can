@@ -12,10 +12,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -31,23 +33,43 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.cksckckcks.downloadifyoucan.theme.MainColor
 import com.cksckckcks.downloadifyoucan.theme.pretendard
 import com.cksckckcks.downloadifyoucan.ui.component.ToDoCard
 import com.cksckckcks.downloadifyoucan.viewModel.MainViewModel
+import downloadifyoucan.composeapp.generated.resources.Res
+import downloadifyoucan.composeapp.generated.resources.ic_add
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
-@Preview(showBackground = true)
+class MainScreen : Screen {
+    @OptIn(ExperimentalTime::class)
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel: MainViewModel = koinInject()
+
+        MainScreenContent(
+            viewModel = viewModel,
+            onAddClick = { navigator.push(AddToDoScreen()) }
+        )
+    }
+}
+
 @OptIn(ExperimentalTime::class)
 @Composable
-fun MainScreen(
-    viewModel: MainViewModel
+fun MainScreenContent(
+    viewModel: MainViewModel,
+    onAddClick: () -> Unit
 ) {
     val localDateTime = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault())
@@ -64,7 +86,24 @@ fun MainScreen(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.systemBars)
+            .windowInsetsPadding(WindowInsets.systemBars),
+        floatingActionButton = {
+            Box(
+                modifier = Modifier
+                    .padding(15.dp)
+            ) {
+                Icon(
+                    painter = painterResource(Res.drawable.ic_add),
+                    contentDescription = "추가",
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clickable {
+                            onAddClick()
+                        }
+                )
+            }
+        }
     ) {
         Column(
             modifier = Modifier
@@ -87,7 +126,6 @@ fun MainScreen(
                 modifier = Modifier.padding(vertical = (12.5).dp, horizontal = 40.dp)
             )
 
-
             // progress status
             Box(
                 modifier = Modifier
@@ -105,8 +143,6 @@ fun MainScreen(
                     doneCount = 3
                 )
             }
-
-
 
             LazyColumn(
                 modifier = Modifier

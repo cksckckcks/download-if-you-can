@@ -18,6 +18,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.cksckckcks.downloadifyoucan.ui.component.MainButton
 import com.cksckckcks.downloadifyoucan.ui.component.MainInputField
 import com.cksckckcks.downloadifyoucan.ui.component.PrioritySelector
@@ -25,14 +28,33 @@ import com.cksckckcks.downloadifyoucan.ui.component.SubTitleText
 import com.cksckckcks.downloadifyoucan.ui.component.TitleText
 import com.cksckckcks.downloadifyoucan.viewModel.AddToDoViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.koinInject
 import kotlin.time.ExperimentalTime
 
+
+class AddToDoScreen : Screen {
+    @OptIn(ExperimentalTime::class)
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel: AddToDoViewModel = koinInject()
+
+        AddToDoScreenContent(
+            viewModel = viewModel,
+            onSaveSuccess = {
+                viewModel.addTodo()
+                navigator.pop()
+            }
+        )
+    }
+}
 
 @Preview(showBackground = true)
 @OptIn(ExperimentalTime::class)
 @Composable
-fun AddToDoScreen(
-    viewModel: AddToDoViewModel
+fun AddToDoScreenContent(
+    viewModel: AddToDoViewModel,
+    onSaveSuccess: () -> Unit
 ) {
     val selectedDate by viewModel.selectedDate.collectAsState()
     val title by viewModel.title.collectAsState()
@@ -111,7 +133,7 @@ fun AddToDoScreen(
                 text = "할일 추가하기",
                 enable = viewModel.checkInput(),
                 buttonClick = {
-                    viewModel.addTodo()
+                    onSaveSuccess()
                 }
             )
         }
