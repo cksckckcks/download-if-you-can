@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,6 +48,7 @@ class ModifyToDoScreen(
             onModifyClick = {
                 viewModel.modifyTodo()
                 navigator.pop()
+                navigator.pop()
             }
         )
     }
@@ -78,8 +81,9 @@ fun ModifyToDoScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 22.dp)
+                .verticalScroll(rememberScrollState())
         ) {
-            TitleText(text = "할일 추가")
+            TitleText(text = "할일 수정")
 
             Spacer(modifier = Modifier.height(39.dp))
 
