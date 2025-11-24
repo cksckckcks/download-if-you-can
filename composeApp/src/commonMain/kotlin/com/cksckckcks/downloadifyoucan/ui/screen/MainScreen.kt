@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -43,9 +45,12 @@ import com.cksckckcks.downloadifyoucan.ui.component.ToDoCard
 import com.cksckckcks.downloadifyoucan.viewModel.MainViewModel
 import downloadifyoucan.composeapp.generated.resources.Res
 import downloadifyoucan.composeapp.generated.resources.ic_add
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
@@ -193,29 +198,61 @@ fun WeekCalendar(
     dateClickable: (LocalDate) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // 큰 숫자 넣어두기
+    val initialPage = 100
+    val pagerState = rememberPagerState(
+        initialPage = initialPage,
+        pageCount = { 200 }
+    )
+
+    HorizontalPager(
+        state = pagerState,
+        modifier = modifier
+    ) { page ->
+        // 현재 페이지에서 몇 주 떨어져 있는지 계산
+        val weekOffset = page - initialPage
+
+        WeekCalendarItem(
+            localDateTime = localDateTime,
+            selectedDate = selectedDate,
+            weekOffset = weekOffset,
+            dateClickable = dateClickable
+        )
+    }
+}
+@Composable
+fun WeekCalendarItem(
+    localDateTime: LocalDateTime,
+    selectedDate: LocalDate,
+    dateClickable: (LocalDate) -> Unit,
+    weekOffset: Int
+) {
+    val today = localDateTime.date
     val currentDayOfWeek = (localDateTime.dayOfWeek.ordinal + 1) % 7
-    val currentDay = localDateTime.dayOfMonth
+
+    val weekStartDate = today
+        .minus(currentDayOfWeek, DateTimeUnit.DAY)  // 이번 주 일요일
+        .plus(weekOffset * 7, DateTimeUnit.DAY)
 
     val weekDays = (0..6).map { offset ->
-        val day = currentDay - currentDayOfWeek + offset
-        day
+        weekStartDate.plus(offset, DateTimeUnit.DAY)
     }
 
     val dayNames = listOf("일", "월", "화", "수", "목", "금", "토")
 
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        weekDays.forEachIndexed { index, day ->
+        weekDays.forEachIndexed { index, date ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(25))
-                    .background(if (day == selectedDate.dayOfMonth) MainColor.copy(alpha = 0.1f) else Color.White)
+                    .background(if (date == selectedDate) MainColor.copy(alpha = 0.1f) else Color.White)
                     .padding(vertical = 10.dp)
-                    .clickable { dateClickable(LocalDate(localDateTime.year, localDateTime.monthNumber, day)) }
+                    .clickable { dateClickable(date) }
 
             ) {
                 Text(
@@ -233,11 +270,11 @@ fun WeekCalendar(
                 Spacer(modifier = Modifier.height(6.dp))
 
                 Text(
-                    text = day.toString(),
+                    text = date.day.toString(),
                     fontFamily = pretendard(),
-                    fontWeight = if (currentDayOfWeek == index) FontWeight.Bold else FontWeight.Medium,
+                    fontWeight = if (date == selectedDate) FontWeight.Bold else FontWeight.Medium,
                     fontSize = 14.sp,
-                    color = if (currentDayOfWeek == index) Color.Black else Color.Gray
+                    color = if (date == selectedDate) Color.Black else Color.Gray
                 )
             }
 
