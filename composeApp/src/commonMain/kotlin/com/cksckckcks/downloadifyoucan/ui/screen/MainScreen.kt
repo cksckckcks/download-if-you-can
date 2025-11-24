@@ -92,7 +92,6 @@ fun MainScreenContent(
         modifier = Modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.systemBars),
-        containerColor = Color.White,
         floatingActionButton = {
             Box(
                 modifier = Modifier

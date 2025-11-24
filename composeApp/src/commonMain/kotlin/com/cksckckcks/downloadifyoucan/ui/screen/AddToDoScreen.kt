@@ -19,7 +19,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -67,16 +66,16 @@ fun AddToDoScreenContent(
     val itemSpaceValue = 21.dp
 
 
-        Scaffold(
+    Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.systemBars),
-            containerColor = Color.White
+            .windowInsetsPadding(WindowInsets.systemBars)
+            .padding(horizontal = 24.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 22.dp, start = 24.dp, end = 24.dp)
+                .padding(top = 22.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             TitleText(text = "할일 추가")
