@@ -133,7 +133,7 @@ CREATE TABLE Todo (
 ```
 
 ## 디자인
-[![Figma](https://www.figma.com/design/K6GQmAV4w4W4C2zuRv0ynV/APP_UI?node-id=0-1&p=f)](링크)
+[![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)](https://www.figma.com/design/K6GQmAV4w4W4C2zuRv0ynV/APP_UI?node-id=0-1&p=f)
 
 ## 실행화면
 - Android
