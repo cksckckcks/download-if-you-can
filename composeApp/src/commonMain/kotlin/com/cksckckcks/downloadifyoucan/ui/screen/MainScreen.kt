@@ -83,7 +83,9 @@ fun MainScreenContent(
     val selectedMonth = selectedDate.monthNumber
     val selectedDay = selectedDate.dayOfMonth
 
-    val toDoList by viewModel.todoList.collectAsState()
+    val toDoCount by viewModel.todoCount.collectAsState()
+    val doneCount by viewModel.todoDoneCount.collectAsState()
+    val todos by viewModel.todos.collectAsState()
 
 
     Scaffold(
@@ -142,8 +144,8 @@ fun MainScreenContent(
                         .padding(horizontal = 20.dp, vertical = 20.dp),
                     month = selectedMonth,
                     day = selectedDay,
-                    toDoCount = 10, // 임시 하드코딩
-                    doneCount = 3
+                    toDoCount = toDoCount,
+                    doneCount = doneCount
                 )
             }
 
@@ -153,8 +155,8 @@ fun MainScreenContent(
                     .padding(horizontal = (28.5.dp), vertical = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                items(toDoList.size) { idx ->
-                    val toDo = toDoList[idx]
+                items(todos.size) { idx ->
+                    val toDo = todos[idx]
 
                     ToDoCard(
                         toDoItem = toDo,

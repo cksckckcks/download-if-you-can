@@ -21,8 +21,16 @@ class MainViewModel(
     private val _selectedDate = MutableStateFlow(Clock.System.todayIn(TimeZone.currentSystemDefault()))
     val selectedDate: StateFlow<LocalDate> = _selectedDate.asStateFlow()
 
-    private val _todoList = MutableStateFlow<List<ToDo>>(emptyList())
-    val todoList: StateFlow<List<ToDo>> = _todoList.asStateFlow()
+    private val _todos = MutableStateFlow<List<ToDo>>(emptyList())
+    val todos: StateFlow<List<ToDo>> = _todos.asStateFlow()
+
+    private val _todoCount = MutableStateFlow(_todos.value.count())
+    val todoCount = _todoCount.asStateFlow()
+
+    private val _todoDoneCount = MutableStateFlow(_todos.value.count { it.isDone })
+    val todoDoneCount = _todoDoneCount.asStateFlow()
+
+
 
     init {
         loadTodosByDate(_selectedDate.value)
@@ -37,7 +45,9 @@ class MainViewModel(
     private fun loadAllTodos() {
         viewModelScope.launch {
             dataBase.getAllTodos().collect { dbTodos ->
-                _todoList.value = dbTodos.map { it.toToDo() }
+                _todos.value = dbTodos.map { it.toToDo() }
+
+                updateCounts()
             }
         }
     }
@@ -47,7 +57,9 @@ class MainViewModel(
             val dateString = date.toString()
 
             dataBase.getTodosByDate(dateString).collect { dbTodos ->
-                _todoList.value = dbTodos.map { it.toToDo() }
+                _todos.value = dbTodos.map { it.toToDo() }
+
+                updateCounts()
             }
         }
     }
@@ -55,11 +67,19 @@ class MainViewModel(
     fun todoDelete(id: Int) {
         viewModelScope.launch {
             dataBase.deleteTodo(id.toLong())
+
+            updateCounts()
         }
     }
+
     fun todoDoneToggle(id: Int, isDone: Boolean) {
         viewModelScope.launch {
             dataBase.toggleComplete(id.toLong(), isDone = isDone)
         }
+    }
+
+    private fun updateCounts() {
+        _todoCount.value = _todos.value.count()
+        _todoDoneCount.value = _todos.value.count { it.isDone }
     }
 }
