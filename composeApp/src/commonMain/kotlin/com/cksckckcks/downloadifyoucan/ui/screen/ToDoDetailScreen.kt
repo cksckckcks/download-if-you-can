@@ -34,6 +34,8 @@ import com.cksckckcks.downloadifyoucan.model.image
 import com.cksckckcks.downloadifyoucan.theme.pretendard
 import com.cksckckcks.downloadifyoucan.ui.component.DateBox
 import com.cksckckcks.downloadifyoucan.ui.component.TitleText
+import downloadifyoucan.composeapp.generated.resources.Res
+import downloadifyoucan.composeapp.generated.resources.ic_modify
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -63,11 +65,26 @@ fun ToDoDetailScreenContent(
                 .fillMaxWidth()
                 .padding(top = 22.dp)
         ) {
-            TitleText(
-                text = "할일 상세정보",
+            Row(
                 modifier = Modifier
-                    .padding(start = 20.dp, bottom = 37.dp)
-            )
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, end = 20.dp, bottom = 37.dp)
+            ) {
+                TitleText(
+                    text = "할일 상세정보",
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Icon(
+                    painter = painterResource(Res.drawable.ic_modify),
+                    contentDescription = "할 일 수정하기",
+                    modifier = Modifier
+                        .size(24.dp)
+                )
+            }
+
+
 
             DateBox(
                 modifier = Modifier
