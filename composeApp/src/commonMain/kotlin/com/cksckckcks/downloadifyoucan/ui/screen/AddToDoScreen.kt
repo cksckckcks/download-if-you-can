@@ -74,6 +74,7 @@ fun AddToDoScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 22.dp)
+                .windowInsetsPadding(WindowInsets.systemBars)
         ) {
             TitleText(text = "할일 추가")
 
