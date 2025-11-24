@@ -132,6 +132,9 @@ CREATE TABLE Todo (
 );
 ```
 
+## 디자인
+[![Figma](https://www.figma.com/design/K6GQmAV4w4W4C2zuRv0ynV/APP_UI?node-id=0-1&p=f)](링크)
+
 ## 실행화면
 - Android
 <img width="464" height="948" alt="image" src="https://github.com/user-attachments/assets/1910fd27-efec-40a2-8f3e-3d6c78154215" />
@@ -147,5 +150,5 @@ CREATE TABLE Todo (
 
 <img width="464" height="948" alt="스크린샷 2025-11-24 오후 9 13 29" src="https://github.com/user-attachments/assets/df0b2c7d-a59a-4b68-8006-1c3321da60bd" />
 
-## 개발자
+## 개발 / 디자인
 - **정찬** - [GitHub](https://github.com/cksckckcks)
