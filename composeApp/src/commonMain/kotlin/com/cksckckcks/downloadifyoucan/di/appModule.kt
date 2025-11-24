@@ -4,6 +4,7 @@ import com.cksckckcks.downloadifyoucan.database.DriverFactory
 import com.cksckckcks.downloadifyoucan.database.ToDoDataBase
 import com.cksckckcks.downloadifyoucan.viewModel.AddToDoViewModel
 import com.cksckckcks.downloadifyoucan.viewModel.MainViewModel
+import com.cksckckcks.downloadifyoucan.viewModel.ModifyToDoViewModel
 import org.koin.dsl.module
 
 val appModule = module {
@@ -13,4 +14,5 @@ val appModule = module {
     // ViewModels
     factory { MainViewModel(get()) }
     factory { AddToDoViewModel(get()) }
+    factory { ModifyToDoViewModel(get()) }
 }
