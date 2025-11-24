@@ -31,6 +31,9 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.cksckckcks.downloadifyoucan.theme.MainColor
 import com.cksckckcks.downloadifyoucan.theme.pretendard
 import com.cksckckcks.downloadifyoucan.ui.component.ToDoCard
@@ -40,14 +43,29 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.koinInject
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
-@Preview(showBackground = true)
+class MainScreen : Screen {
+    @OptIn(ExperimentalTime::class)
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel: MainViewModel = koinInject()  // Koin으로 주입!
+
+        MainScreenContent(
+            viewModel = viewModel,
+            onAddClick = { navigator.push(AddToDoScreen()) }
+        )
+    }
+}
+
 @OptIn(ExperimentalTime::class)
 @Composable
-fun MainScreen(
-    viewModel: MainViewModel
+fun MainScreenContent(
+    viewModel: MainViewModel,
+    onAddClick: () -> Unit
 ) {
     val localDateTime = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault())
