@@ -158,13 +158,12 @@ fun MainScreenContent(
 
                     ToDoCard(
                         toDoItem = toDo,
-                        onCardClick = { onToDoClick(toDo) }
+                        onCardClick = { onToDoClick(toDo) },
+                        onDeleteClick = { viewModel.todoDelete(toDo.id) },
+                        onCheckClick = { viewModel.todoDoneToggle(toDo.id, !toDo.isDone)}
                     )
-
-
                 }
             }
-
         }
     }
 }

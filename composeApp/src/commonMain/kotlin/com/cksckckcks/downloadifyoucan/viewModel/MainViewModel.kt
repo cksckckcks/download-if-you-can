@@ -25,7 +25,7 @@ class MainViewModel(
     val todoList: StateFlow<List<ToDo>> = _todoList.asStateFlow()
 
     init {
-        loadAllTodos()
+        loadTodosByDate(_selectedDate.value)
     }
 
     fun updateSelectedDate(date: LocalDate) {
@@ -49,6 +49,17 @@ class MainViewModel(
             dataBase.getTodosByDate(dateString).collect { dbTodos ->
                 _todoList.value = dbTodos.map { it.toToDo() }
             }
+        }
+    }
+
+    fun todoDelete(id: Int) {
+        viewModelScope.launch {
+            dataBase.deleteTodo(id.toLong())
+        }
+    }
+    fun todoDoneToggle(id: Int, isDone: Boolean) {
+        viewModelScope.launch {
+            dataBase.toggleComplete(id.toLong(), isDone = isDone)
         }
     }
 }
