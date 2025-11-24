@@ -75,7 +75,7 @@ fun AddToDoScreenContent(
                 .fillMaxWidth()
                 .padding(top = 22.dp)
         ) {
-            TitleText("할일 추가")
+            TitleText(text = "할일 추가")
 
             Spacer(modifier = Modifier.height(39.dp))
 
