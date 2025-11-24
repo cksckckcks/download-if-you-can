@@ -2,6 +2,7 @@ package com.cksckckcks.downloadifyoucan.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,16 +45,20 @@ class ToDoDetailScreen(
 ) : Screen {
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow // 수정하기 넘어갈 때 사용하자
+        val navigator = LocalNavigator.currentOrThrow
 
-        ToDoDetailScreenContent(todo = todo)
+        ToDoDetailScreenContent(
+            todo = todo,
+            modifyClick = { navigator.push(ModifyToDoScreen(it)) }
+        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ToDoDetailScreenContent(
-    todo: ToDo
+    todo: ToDo,
+    modifyClick: (ToDo) -> Unit
 ) {
     Scaffold(
         modifier = Modifier
@@ -81,6 +86,9 @@ fun ToDoDetailScreenContent(
                     contentDescription = "할 일 수정하기",
                     modifier = Modifier
                         .size(24.dp)
+                        .clickable {
+                            modifyClick(todo)
+                        }
                 )
             }
 
