@@ -63,7 +63,8 @@ fun ToDoDetailScreenContent(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.systemBars)
+            .windowInsetsPadding(WindowInsets.systemBars),
+        containerColor = Color.White
     ) {
         Column(
             modifier = Modifier
