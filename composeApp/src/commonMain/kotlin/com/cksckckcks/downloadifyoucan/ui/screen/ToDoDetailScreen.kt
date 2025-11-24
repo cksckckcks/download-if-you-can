@@ -34,24 +34,14 @@ import com.cksckckcks.downloadifyoucan.ui.component.TitleText
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-class ToDoDetailScreen : Screen {
+class ToDoDetailScreen(
+    private val todo: ToDo
+) : Screen {
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
-        val tmpToDo = ToDo(
-            id = 1,
-            title = "디자인하기",
-            description = "UI 완성하기\nUX신경쓰기\n123123123123123123123123123123123123",
-            year = 2025,
-            month = 11,
-            day = 24,
-            priority = Priority.MEDIUM,
-            isDone = false
-        )
+        val navigator = LocalNavigator.currentOrThrow // 수정하기 넘어갈 때 사용하자
 
-        ToDoDetailScreenContent(
-            todo = tmpToDo
-        )
+        ToDoDetailScreenContent(todo = todo)
     }
 }
 
