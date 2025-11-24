@@ -24,7 +24,7 @@ SELECT * FROM Todo WHERE id = ?;
 
 selectByDate:
 SELECT * FROM Todo
-WHERE isDone = 0 AND dueDate = ?
+WHERE dueDate = ?
 ORDER BY priority DESC;
 
 
