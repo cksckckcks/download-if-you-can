@@ -12,10 +12,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -38,11 +41,13 @@ import com.cksckckcks.downloadifyoucan.theme.MainColor
 import com.cksckckcks.downloadifyoucan.theme.pretendard
 import com.cksckckcks.downloadifyoucan.ui.component.ToDoCard
 import com.cksckckcks.downloadifyoucan.viewModel.MainViewModel
+import downloadifyoucan.composeapp.generated.resources.Res
+import downloadifyoucan.composeapp.generated.resources.ic_add
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
@@ -52,7 +57,7 @@ class MainScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel: MainViewModel = koinInject()  // Koin으로 주입!
+        val viewModel: MainViewModel = koinInject()
 
         MainScreenContent(
             viewModel = viewModel,
@@ -82,7 +87,24 @@ fun MainScreenContent(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.systemBars)
+            .windowInsetsPadding(WindowInsets.systemBars),
+        floatingActionButton = {
+            Box(
+                modifier = Modifier
+                    .padding(15.dp)
+            ) {
+                Icon(
+                    painter = painterResource(Res.drawable.ic_add),
+                    contentDescription = "추가",
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clickable {
+                            onAddClick()
+                        }
+                )
+            }
+        }
     ) {
         Column(
             modifier = Modifier
@@ -105,7 +127,6 @@ fun MainScreenContent(
                 modifier = Modifier.padding(vertical = (12.5).dp, horizontal = 40.dp)
             )
 
-
             // progress status
             Box(
                 modifier = Modifier
@@ -123,8 +144,6 @@ fun MainScreenContent(
                     doneCount = 3
                 )
             }
-
-
 
             LazyColumn(
                 modifier = Modifier
