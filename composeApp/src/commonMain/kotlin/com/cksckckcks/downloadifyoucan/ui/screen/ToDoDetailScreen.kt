@@ -6,11 +6,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -34,24 +37,14 @@ import com.cksckckcks.downloadifyoucan.ui.component.TitleText
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-class ToDoDetailScreen : Screen {
+class ToDoDetailScreen(
+    private val todo: ToDo
+) : Screen {
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
-        val tmpToDo = ToDo(
-            id = 1,
-            title = "디자인하기",
-            description = "UI 완성하기\nUX신경쓰기\n123123123123123123123123123123123123",
-            year = 2025,
-            month = 11,
-            day = 24,
-            priority = Priority.MEDIUM,
-            isDone = false
-        )
+        val navigator = LocalNavigator.currentOrThrow // 수정하기 넘어갈 때 사용하자
 
-        ToDoDetailScreenContent(
-            todo = tmpToDo
-        )
+        ToDoDetailScreenContent(todo = todo)
     }
 }
 
@@ -63,6 +56,7 @@ fun ToDoDetailScreenContent(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.systemBars)
     ) {
         Column(
             modifier = Modifier

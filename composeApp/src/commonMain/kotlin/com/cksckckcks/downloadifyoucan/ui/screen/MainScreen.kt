@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.cksckckcks.downloadifyoucan.model.ToDo
 import com.cksckckcks.downloadifyoucan.theme.MainColor
 import com.cksckckcks.downloadifyoucan.theme.pretendard
 import com.cksckckcks.downloadifyoucan.ui.component.ToDoCard
@@ -60,7 +61,8 @@ class MainScreen : Screen {
 
         MainScreenContent(
             viewModel = viewModel,
-            onAddClick = { navigator.push(AddToDoScreen()) }
+            onAddClick = { navigator.push(AddToDoScreen()) },
+            onToDoClick = { navigator.push(ToDoDetailScreen(it))}
         )
     }
 }
@@ -69,7 +71,8 @@ class MainScreen : Screen {
 @Composable
 fun MainScreenContent(
     viewModel: MainViewModel,
-    onAddClick: () -> Unit
+    onAddClick: () -> Unit,
+    onToDoClick: (ToDo) -> Unit
 ) {
     val localDateTime = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault())
@@ -153,7 +156,10 @@ fun MainScreenContent(
                 items(toDoList.size) { idx ->
                     val toDo = toDoList[idx]
 
-                    ToDoCard(toDoItem = toDo)
+                    ToDoCard(
+                        toDoItem = toDo,
+                        onCardClick = { onToDoClick(toDo) }
+                    )
 
 
                 }
