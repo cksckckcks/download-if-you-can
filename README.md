@@ -1,5 +1,5 @@
 # 📝 ToDo App
-
+수정
 Kotlin Multiplatform Mobile(KMM)과 Compose Multiplatform(CMP)을 사용하여 개발한 크로스 플랫폼 할일 관리 앱입니다.
 
 ## 주요 기능
